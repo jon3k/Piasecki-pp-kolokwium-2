@@ -1,0 +1,149 @@
+Napisz funkcję UTWORZ_TABLICĘ( rozmiar_A )
+tworzącą dynamiczną tablicę A liczb całkowitych
+(o rozmiarze zadawanym jako parametr tej funkcji).
+       Następnie napisz funkcję KOPIUJ_DODATNIE(A,rozmiar_A,B,rozmiar_B),
+która policzy ile z elementów tablicy A jest dodatnich
+i utworzy nową dynamiczną tablicę B zawierającą kopie tych elementów tablicy A,
+które mają wartości dodatnie.
+
+#include <iostream>
+using namespace std;
+
+int * UTWORZ_TABLICE(int rozmiar_A)
+{
+	return new int[rozmiar_A];
+}
+int * KOPIUJ_DODATNIE(int A[], int rozmiar_A, int * rozmiar_B)
+{
+	int liczba_dodatnich = 0;
+	int * B;
+	int pozycja = 0;
+	
+	for(int i = 0; i < rozmiar_A; i++)
+		if(A[i] > 0) liczba_dodatnich++;
+		
+	*rozmiar_B = liczba_dodatnich;
+	B = new int[*rozmiar_B];
+	
+	for(int i = 0; i < rozmiar_A; i++)
+	{
+		if(A[i] > 0)
+		{
+			B[pozycja] = A[i];
+			pozycja++;
+		}
+	}
+	return B;
+}
+int main()
+{
+	int rozmiar_B;
+	int A[] = {-10, -12, 2, 4, 90, 1220, -5, 0};
+	int * B = KOPIUJ_DODATNIE(A, 8, &rozmiar_B);
+	
+	for(int i = 0; i < rozmiar_B; i++)
+		cout << B[i] << " ";
+	return 0;
+}
+
+Napisz funkcje tworzącą dynamiczną tablice struktur
+opisujących dane osobowe studentów (wcześniej zdefinuj typ tej struktury).
+Wielkość tej dynamicznie tworzonej tablicy
+powinna być zadawana przez użytkownika (z klawiatury).
+Następnie napisz funkcję wczytującą z klawiatury dane do w/w tablicy.
+
+#include <iostream>
+using namespace std;
+
+struct student
+{
+	char nazwisko[20];
+	char imie[15];
+	double stypendium;
+	bool zaliczenie;
+};
+student * UTWORZ_BAZE(int rozmiar)
+{
+	return new student[rozmiar];
+}
+void WCZYTAJ_DANE(student * baza, int rozmiar)
+{
+	for(int i = 0; i < rozmiar; i++)
+	{
+		cout << "Nazwisko: ";
+		cin >> baza[i].nazwisko;
+		cout << "Imie: ";
+		cin >> baza[i].imie;
+		cout << "Stypendium: ";
+		cin >> baza[i].stypendium;
+		cout << "Zaliczenie (1/0): ";
+		cin >> baza[i].zaliczenie;
+		cout << endl << endl;
+	}
+}
+
+int main()
+{
+	int rozmiar_bazy;
+	student * baza;
+	
+	cout << "Wprowadz rozmiar bazy: ";
+	cin >> rozmiar_bazy;
+	
+	baza = UTWORZ_BAZE(rozmiar_bazy);
+	WCZYTAJ_DANE(baza, rozmiar_bazy);
+	
+	for(int i = 0; i < rozmiar_bazy; i++)
+	{
+		cout << "Nazwisko: " << baza[i].nazwisko << endl;
+		cout << "Imie: " << baza[i].imie << endl;
+		cout << "Stypendium: " << baza[i].stypendium << endl;
+		cout << "Zaliczenie: " << baza[i].zaliczenie << endl << endl;
+	}
+	
+	return 0;
+}
+
+Napisz funkcję tworzącą dynamiczną tablicę wskaźników na teksty
+o maksymalnej dlugości 30 znaków.
+Wielkość tablicy powinna być zadawana przez użytkownika (z klawiatury).
+Następnie napisz funkcję wczytującą kolejne teksty z klawiatury
+i umieszczającą je w tej dynamicznie utworzonej tablicy.
+
+#include <iostream>
+using namespace std;
+
+char ** UTWORZ_TABLICE(int rozmiar)
+{
+	char ** tablica = new char*[rozmiar];
+	
+	for(int i = 0; i < rozmiar; i++)
+		tablica[i] = new char[30];
+		
+	return tablica;
+}
+void WCZYTAJ_TEKSTY(char ** tablica, int rozmiar)
+{
+	for(int i = 0; i < rozmiar; i++)
+	{
+		cout << "Tekst: ";
+		cin.getline(tablica[i], 30);
+		fflush(stdin);
+	}
+}
+int main()
+{
+	char ** tablica;
+	int rozmiar;
+	
+	cout << "Wprowadz rozmiar tablicy: ";
+	cin >> rozmiar;
+	fflush(stdin);
+	
+	tablica = UTWORZ_TABLICE(rozmiar);
+	
+	WCZYTAJ_TEKSTY(tablica, rozmiar);
+	for(int i = 0; i < rozmiar; i++)
+		cout << tablica[i] << endl;
+	return 0;
+}
