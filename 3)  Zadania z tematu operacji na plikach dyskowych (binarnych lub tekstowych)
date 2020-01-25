@@ -1,0 +1,246 @@
+//Napisz funkcję wyznaczającą wartość średnią
+z ciągu liczb typu rzeczywistych (double)
+zapisanych na dysku w pliku binarnym "dane.dat".
+
+#include <stdio.h>
+
+double Srednia(char * nazwa_pliku)
+{
+	FILE * plik = fopen(nazwa_pliku, "rb");
+	if(plik)
+	{
+		int licznik = 0;
+		double liczba, suma = 0;
+		while(fread(&liczba, sizeof(double), 1, plik) == 1)
+		{
+			licznik++;
+			suma += liczba;
+		}
+		if(licznik > 0)
+		{
+			printf("Srednia = %.2f", suma / licznik);
+			return suma / licznik;
+		}
+	}
+	else printf("Blad otwierania pliku!");
+	return -1;
+}
+int main()
+{
+	char nazwa_pliku[] = "dane.dat";
+	Srednia(nazwa_pliku);
+	return 0;
+}
+
+//Dany jest plik tekstowy, o nazwie "dane.txt", zawierający liczby rzeczywiste.
+Napisz funkcję kopiującą zawartość tego pliku do nowego (tekstowego)
+pliku "wyniki.dat", ale z pominięciem liczb ujemnych.
+
+#include <stdio.h>
+
+void PrzepiszDodatnie(char * nazwa_pliku)
+{
+	FILE * dane = fopen(nazwa_pliku, "rt");
+	FILE * wynik = fopen("wynik.dat", "wt");
+	
+	if(dane)
+	{
+		double liczba;
+		while(fscanf(dane, "%lf", &liczba) == 1)
+			if(liczba >= 0) fprintf(wynik, "%lf ", liczba);	
+		fclose(dane);
+		fclose(wynik);
+	}
+	else printf("Blad otwierania pliku!");
+}
+int main()
+{
+	char nazwa_pliku[] = "dane.txt";
+	PrzepiszDodatnie(nazwa_pliku);
+	return 0;
+}
+
+
+//Dany jest plik binarny, o nazwie "liczby.bin",
+zawierający nieznaną ilość czterobajtowych liczb całkowitych.
+Napisz funkcję odwracającą kolejność liczb w tym pliku
+tzn., że pierwsza liczba znajdzie się na końcu pliku
+a ostatnia liczba na pierwszej pozycji,
+druga liczba na przedostatniej pozycji a przedostatnia na drugiej, itd.
+
+#include <stdio.h>
+
+void Odwroc(char * nazwa_pliku)
+{
+	FILE * plik = fopen(nazwa_pliku, "rb");
+	if(plik)
+	{
+		int rozmiar;
+		int * tablica;
+		
+		//ustalanie ilosci liczb w pliku
+		fseek(plik, 0, SEEK_END);
+		rozmiar = ftell(plik) / sizeof(int);
+		tablica = new int[rozmiar];
+		
+		//wrzucenie liczb do tablicy
+		fseek(plik, 0, SEEK_SET);
+		fread(tablica, sizeof(int), rozmiar, plik);
+		fclose(plik);
+		
+		plik = fopen(nazwa_pliku, "wb");
+		
+		//wpisywanie od nowa do pliku, tylko ze od tylu XD
+		for(int i = 9; i >= 0; i--)
+			fwrite(&tablica[i], sizeof(int), 1, plik);
+		fclose(plik);
+	}
+}
+int main()
+{
+	char nazwa_pliku[] = "liczby.bin";
+	Odwroc(nazwa_pliku);
+	return 0;
+}
+
+//Dany jest plik tekstowy, o nazwie "liczby.txt",
+zawierający nieznaną ilość liczb rzeczywistych.
+Napisz funkcję zamieniającą znaki wszystkich liczb w tym pliku na przeciwne.
+Tzn. liczba dodatnia powinna stać się liczbą ujemną, a liczba ujemna dodatnią.
+
+#include <stdio.h>
+
+void Negacja(char * nazwa_pliku)
+{
+	FILE * dane = fopen(nazwa_pliku, "rt");
+	FILE * pomocniczy = fopen("pomocniczy.txt", "wt");
+	if(dane && pomocniczy)
+	{
+		double liczba;
+		while(fscanf(dane, "%lf", &liczba) == 1)
+			fprintf(pomocniczy, "%lf ", -liczba);
+		fclose(dane);
+		fclose(pomocniczy);
+		remove("liczby.txt");
+		rename("pomocniczy.txt", "liczby.txt");
+	}
+}
+
+int main()
+{
+	char nazwa_pliku[] = "liczby.txt";
+	Negacja(nazwa_pliku);
+	return 0;
+}
+
+
+//Napisz funkcję wyznaczającą pozycję liczby o maksymalnej wartości
+w ciągu liczb całkowitych zapisanych na dysku w pliku tekstowym "dane.dat".
+
+#include <stdio.h>
+
+int PozycjaMaksimum(char * nazwa_pliku)
+{
+	FILE * dane = fopen(nazwa_pliku, "rt");
+	int maksimum, liczba, pozycja = 0, max_poz;
+	
+	if(dane)
+	{	
+		while(fscanf(dane, "%d", &liczba) == 1)
+		{
+			if(pozycja == 0)
+			{
+				maksimum = liczba;
+				max_poz = 0;
+			}
+			else if(maksimum < liczba)
+			{
+				maksimum = liczba;
+				max_poz = pozycja;
+			}
+			pozycja++;
+		}
+		
+		if(pozycja != 0) return max_poz;
+		else printf("Nie wczytano zadnej liczby!\n");
+		fclose(dane);
+	}
+	return -1;
+}
+
+int main()
+{
+	char nazwa_pliku[] = "dane2.dat";
+	printf("Pozycja maksimum: %d", PozycjaMaksimum(nazwa_pliku));
+	return 0;
+}
+
+//Na dysku znajduje się plik binarny "liczby.bin"
+zawierający nieznaną ilość liczb long double.
+Napisz funkcję zmieniającą w tym pliku wartość N-tej liczby
+poprzez powiększenie jej o wartość X.
+N i X powinny być parametrami wejściowymi tej funkcji.
+
+#include <stdio.h>
+
+void Mnozenie(char * nazwa_pliku, int N, int X)
+{
+	FILE * plik = fopen(nazwa_pliku, "r+b");
+	if(plik)
+	{
+		int rozmiar;
+		double liczba;
+		fseek(plik, 0, SEEK_END);
+		rozmiar = ftell(plik) / sizeof(double);
+		if(N < rozmiar && N >= 0)
+		{
+			fseek(plik, N * sizeof(double), SEEK_SET);
+			fread(&liczba, sizeof(double), 1, plik);
+			liczba *= X;
+			fseek(plik, N * sizeof(double), SEEK_SET);
+			fwrite(&liczba, sizeof(double), 1, plik);
+		}
+		fclose(plik);
+	}
+}
+int main()
+{
+	char nazwa_pliku[] = "liczby2.bin";
+	Mnozenie(nazwa_pliku, 0, 999);
+	return 0;
+}
+
+
+//Napisz funkcję wyznaczającą liczbę wystąpień sekwencji liter: 'aa' , 'bb' lub 'cc'
+w ciągu znaków zapisanych na dysku w binarnym pliku "dane.dat".
+
+#include <stdio.h>
+
+void Sekwencje(char * nazwa_pliku)
+{
+	FILE * plik = fopen(nazwa_pliku, "rb");
+	if(plik)
+	{
+		int aa = 0, bb = 0, cc = 0;
+		char znak1, znak2;
+		
+		if((znak1 = fgetc(plik)) != EOF)
+		{
+			while((znak2 = fgetc(plik)) != EOF)
+			{
+				if(znak1 == 'a' && znak2 == 'a') aa++;
+				else if(znak1 == 'b' && znak2 == 'b') bb++;
+				else if(znak1 == 'c' && znak2 == 'c') cc++;
+				znak1 = znak2;
+			}
+		}
+		fclose(plik);
+		printf("%d %d %d", aa, bb, cc);
+	}
+}
+int main()
+{
+	char nazwa_pliku[] = "litery.bin";
+	Sekwencje(nazwa_pliku);
+	return 0;
+}
