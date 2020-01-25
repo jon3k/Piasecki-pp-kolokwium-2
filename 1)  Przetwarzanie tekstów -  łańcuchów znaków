@@ -1,0 +1,172 @@
+//Napisz program, który wczyta łańcuch znaków z klawiatury
+a następnie usunie z tego łańcucha pierwszą małą literę.
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int N = 100;
+
+int main()
+{
+	char tekst[N];
+	cout << "Wprowadz tekst: ";
+	cin.getline(tekst, N);
+	cout << "Tekst przed modyfikacja: " << tekst;
+	for(int i = 0; tekst[i] != 0; i++)
+	{
+		if(tekst[i] >= 'a' && tekst[i] <= 'z')
+		{
+			for(int j = i; tekst[j] != 0; j++)
+				tekst[j] = tekst[j + 1];
+			break;
+		}
+	}
+	cout << endl << "Tekst po modyfikacji: " << tekst;
+	return 0;
+}
+
+//Napisz funkcję, która usunie wszystkie początkowe spacje
+w łańcuchu tekst, który powinien być parametrem wejściowo/wyjściowym tej funkcji.
+
+char * UsunSpacje(char * tekst)
+{	
+	while(tekst[0] == ' ')
+	{
+		for(int j = 0; tekst[j] != 0; j++)
+			tekst[j] = tekst[j + 1];
+	}
+	return tekst;
+}
+
+//Napisz funkcję formatującą tekst poprzez usunięcie
+wszystkich początkowych i końcowych spacji
+z łańcucha zadanego jako parametr wejściowy tej funkcji.
+
+void UsunSpacje(char * tekst)
+{
+	int koniec = 0;
+	while(tekst[0] == ' ')
+	{
+		for(int i = 0; tekst[i] != 0; i++)
+			tekst[i] = tekst[i + 1];
+	}
+	while(tekst[koniec] != 0)
+		koniec++;
+	while(tekst[koniec - 1] == ' ')
+	{
+		tekst[koniec - 1] = 0;
+		koniec--;
+	}
+}
+
+//Napisz funkcję usuwającą (poprzez skrócenie tekstu)
+wszystkie spacje z łańcucha podawanego jako parametr tej funkcji.
+
+void UsunSpacje(char * tekst)
+{
+	for(int i = 0; tekst[i] != 0; i++)
+	{
+		if(tekst[i] == ' ')
+		{
+			for(int j = i; tekst[j] != 0; j++)
+				tekst[j] = tekst[j + 1];
+			i--;
+		}
+	}
+}
+
+//Napisz funkcję usuwającą z zadanego łańcucha (poprzez skrócenie tekstu)
+wszystkie bezpośrednie powtórzenia liter np. zamieniającą tekst “kommputter” na ”komputer”.
+
+void UsunPowtorzenia(char * tekst)
+{
+	for(int i = 1; tekst[i] != 0; i++)
+	{
+		if(tekst[i] == tekst[i - 1])
+		{
+			for(int j = i; tekst[j] != 0; j++)
+				tekst[j] = tekst[j + 1];
+			i--;
+		}
+	}
+}
+
+//Napisz funkcję dodającą zadaną ilość spacji
+na początku zadanego łańcucha tekst
+(wcześniejsza zawartość tekstu przesuwana jest na dalsze pozycje).
+
+#include <iostream>
+using namespace std;
+
+void DodajSpacje(char * tekst, int liczba)
+{
+	int koniec = 0;
+	while(tekst[koniec] != 0) koniec++;
+	if((liczba + koniec - 1) <= 100) //zabezpieczenie przed wykroczeniem poza zakres tablicy
+		while(liczba--)
+		{
+			for(int i = koniec; i >= 0; i--)
+			{
+				tekst[i + 1] = tekst[i];
+			}
+			tekst[0] = ' ';
+			koniec++;
+		}
+}
+
+//Napisz funkcję usuwającą z łańcucha tekst wszystkie litery
+poczynając od pozycji pocz do litery na pozycji kon.
+
+void UsunLitery(char * tekst, int pocz, int kon)
+{
+	int offset = kon - pocz + 1;
+	for(int i = pocz; tekst[i - 1] != 0; i++)
+	{
+		tekst[i] = tekst[i + offset];
+	}
+}
+void UsunLitery2(char * tekst, int pocz, int kon)
+{
+	while(pocz <= kon--)
+	{
+		for(int i = pocz; tekst[i] != 0; i++)
+			tekst[i] = tekst[i + 1];
+	}
+}
+
+//Napisz funkcję wyrównującą długość zadanego tekst'u do N znaków,
+poprzez dodanie odpowiedniej ilości spacji na końcu tego łańcucha.
+
+void Wyrownaj(char * tekst, int N)
+{
+	int koniec = 0;
+	while(tekst[koniec] != 0) koniec++;
+	if(N > 100) N = 100; //zabezpieczenie przed wykroczeniem poza zakres tablicy
+	N = N - koniec;
+	while(N--)
+	{
+		tekst[koniec] = ' ';
+		koniec++;
+	}
+	tekst[koniec] = 0;
+}
+
+//Napisz funkcję sprawdzającą czy zadany łańcuch znaków
+ma symetryczną zawartość tzn, pierwszy znak jest równy ostatniemu,
+drugi przedostatniemu itd.
+
+bool CzySymetryczny(char * tekst)
+{
+	int poczatek = 0;
+	int koniec = 0;
+	while(tekst[koniec + 1] != 0) koniec++;
+	while(poczatek <= koniec)
+	{
+		if(tekst[poczatek] != tekst[koniec])
+			return false;
+		poczatek++;
+		koniec--;
+	}
+	return true;
+}
