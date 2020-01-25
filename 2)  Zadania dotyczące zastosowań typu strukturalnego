@@ -1,0 +1,298 @@
+//Zdefiniuj typ strukturalny oraz 100-elementową tablicę
+pozwalającą przechowywać informacje o książkach w bibliotece
+(tytuł, autor, indeks, cena) oraz napisz funkcję, która wyświetli na ekranie
+wszystkie dane tanich książek (tzn. cena<10zł)
+
+#include <iostream>
+using namespace std;
+struct ksiazka
+{
+	char tytul[30];
+	char autor[30];
+	int indeks;
+	double cena;
+};
+void WyswietlTanieKsiazki(ksiazka baza[])
+{
+	for(int i = 0; i < 100; i++)
+	{
+		if(baza[i].cena < 10)
+		{
+			cout << "Tytul: " << baza[i].tytul << endl;
+			cout << "Autor: " << baza[i].autor << endl;
+			cout << "Indeks: " << baza[i].indeks << endl;
+			cout << "Cena: " << baza[i].cena << endl << endl;
+		}
+	}
+}
+int main()
+{
+	ksiazka biblioteka[100];
+	return 0;
+}
+
+//Zdefiniuj strukturę przechowującą dane katalogowe ksiażki w bibliotece
+(tytuł = 50 znaków; autor = 30 znaków;  liczba stron = liczba całkowita dodatnia;
+wypożyczona = zmienna logiczna) oraz 200-elementową tablicę takich struktur.
+Napisz funkcję drukującą na ekranie spis wszystkich
+niewypożyczonych książek, które mają więcej niż 100 stron.
+
+#include <iostream>
+using namespace std;
+struct ksiazka
+{
+	char tytul[50];
+	char autor[30];
+	unsigned int liczba_stron;
+	bool wypozyczona;
+};
+void WyswietlKsiazki(ksiazka baza[])
+{
+	for(int i = 0; i < 200; i++)
+	{
+		if(baza[i].wypozyczona == false && baza[i].liczba_stron > 100)
+		{
+			cout << "Tytul: " << baza[i].tytul << endl;
+			cout << "Autor: " << baza[i].autor << endl;
+			cout << "Liczba stron: " << baza[i].liczba_stron << endl << endl;
+		}
+	}
+}
+int main()
+{
+	ksiazka biblioteka[200];
+	return 0;
+}
+
+//Zdefiniuj typ strukturalny oraz 100-elementową tablicę
+pozwalającą przechowywać informacje o samochodach w auto-komisie
+(marka, przebieg, kolor, cena)
+oraz napisz funkcję, która wyświetli na ekranie
+wszystkie dane samochodu o najmniejszym przebiegu.
+
+#include <iostream>
+using namespace std;
+
+struct samochod
+{
+	char marka[20];
+	unsigned int przebieg;
+	char kolor[15];
+	double cena;
+};
+void NajmniejszyPrzebieg(samochod baza[])
+{
+	unsigned int min_id = 0;	
+	for(int i = 1; i < 200; i++)
+	{
+		if(baza[i].przebieg < baza[min_id].przebieg)
+			min_id = i;
+	}
+	cout << "Marka: " << baza[min_id].marka << endl;
+	cout << "Przebieg; " << baza[min_id].przebieg << endl;
+	cout << "Kolor: " << baza[min_id].przebieg << endl;
+	cout << "Cena: " << baza[min_id].cena << endl << endl;
+}
+int main()
+{
+	samochod komis[100];
+	return 0;
+}
+
+//Zdefiniuj typ struktury przechowującej dane personalne pracownika
+(nazwisko - 20 znaków; imię - 15 znaków;  pensja - liczba rzeczywista;
+płeć - znak 'm' lub znak 'k') oraz 100-elementową tablicę takich struktur.
+Napisz funkcję sprawdzającą czy w danej firmie
+większa jest średnia pensja kobiet czy mężczyzn.
+
+#include <iostream>
+using namespace std;
+
+struct pracownik
+{
+	char nazwisko[20];
+	char imie[15];
+	double pensja;
+	char plec;	
+};
+void Srednia(pracownik baza[])
+{
+	int liczba_k = 0;
+	int liczba_m = 0;
+	double suma_k = 0;
+	double suma_m = 0;
+	double srednia_k;
+	double srednia_m;
+	for(int i = 0; i < 100; i++)
+	{
+		if(baza[i].plec == 'm')
+		{
+			suma_m += baza[i].pensja;
+			liczba_m++;
+		}
+		else if(baza[i].plec == 'k')
+		{
+			suma_k += baza[i].pensja;
+			liczba_k++;
+		}
+	}
+	srednia_k = suma_k / liczba_k;
+	srednia_m = suma_m / liczba_m;
+	
+	if(srednia_m > srednia_k) cout << "Mezczyzni zarabiaja wiecej XD";
+	else if(srednia_m < srednia_k) cout << "Kobity zarabiaja wiecej :(";
+	else cout << "Zarabiaja po rowno.";
+}
+int main()
+{
+	pracownik baza[100];
+	return 0;
+}
+
+//Zdefiniuj typ strukturalny oraz 50-cio elementową tablicę struktur
+pozwalającą przechowywać informacje o towarach w sklepie RTV
+(nazwa_towaru, ilosc_sztuk, cena, waga).
+Napisz funkcję, która wyświetli na ekranie wszystkie dane najtańszego towaru.
+
+#include <iostream>
+using namespace std;
+
+struct towar
+{
+	char nazwa_towaru[50];
+	int ilosc_sztuk;
+	double cena;
+	double waga;
+};
+void NajtanszyTowar(towar baza[])
+{
+	int min_id = 0;
+	for(int i = 1; i < 50; i++)
+	{
+		if(baza[i].cena < baza[min_id].cena)
+			min_id = i;
+	}
+	cout << "Nazwa towaru: " << baza[min_id].nazwa_towaru << endl;
+	cout << "Ilosc sztuk: " << baza[min_id].ilosc_sztuk << endl;
+	cout << "Cena: " << baza[min_id].cena << endl;
+	cout << "Waga: " << baza[min_id].waga << endl << endl;
+}
+int main()
+{
+	towar magazyn[50];
+	return 0;
+}
+
+//Zdefiniuj typ struktury przechowującej dane personalne studenta
+(nazwisko = 30 znaków; imię = 25 znaków;  stypendium = ilość złotych i groszy;
+zaliczenie = zmienna logiczna) oraz 100-elementowa tablicę takich struktur.
+Napisz funkcję wyszukującą i zwracającą dane studenta,
+który zaliczył semestr i ma najniższe stypendium.
+
+#include <iostream>
+#include <float.h>
+using namespace std;
+
+struct student
+{
+	char nazwisko[30];
+	char imie[25];
+	double stypendium;
+	bool zaliczenie;
+};
+student NajmniejszeStypendium(student baza[])
+{
+	double min = DBL_MAX;
+	int min_id;
+	for(int i = 0; i < 100; i++)
+	{
+		if(baza[i].zaliczenie && baza[i].stypendium < min)
+		{
+			min = baza[i].stypendium;
+			min_id = i;
+		}
+	}
+	return baza[min_id];
+}
+int main()
+{
+	student uczelnia[100];
+	return 0;
+}
+
+//Zdefiniuj typ struktury przechowującej dane personalne studenta
+(nazwisko : 25 znaków; imię : 15 znaków;  wiek : liczba o wartościach 0-120;
+zaliczenie : zmienna logiczna) oraz 50-elementowa tablicę takich struktur.
+Napisz funkcję wyświetlającą na ekranie dane personalne wszystkich studentów,
+których nazwiska i imiona zaczynają się na tą samą literę
+(np. Krzysztof Kowalski, Norbert Nowak )..
+
+include <iostream>
+using namespace std;
+
+struct student
+{
+	char nazwisko[25];
+	char imie[15];
+	unsigned int wiek;
+	bool zaliczenie;	
+};
+void Wyswietl(student baza[])
+{
+	for(int i = 0; i < 50; i++)
+	{
+		if(baza[i].nazwisko[0] == baza[i].imie[0])
+		{
+			cout << "Nazwisko: " << baza[i].nazwisko << endl;
+			cout << "Imie: " << baza[i].imie << endl;
+			cout << "Wiek : " << baza[i].wiek << endl;
+			cout << "Zaliczenie: ";
+			if(baza[i].zaliczenie) cout << "TAK";
+			else cout << "NIE";
+			cout << endl << endl;
+		}
+	}
+}
+int main()
+{
+	student uczelnia[50];
+	return 0;
+}
+
+//Zdefiniuj typ struktury przechowującej dane o pociągach w rozkładzie jazdy
+(Miasto docelowe: 30 znaków; długość trasy : liczba całkowita bez znaku;
+godzina odjazdu: liczba rzeczy-wista; rodzaj pociągu: znak 'o' - osobowy,
+'p' - pospieszny, 'e' - ekspres) oraz 50-elementową tablicę takich struktur.
+Napisz funkcję wyznaczającą średnią długość trasy pociągów osobowych
+do zadanego miasta.
+Parametry funkcji: tablica_struktur,  ilość_wpisanych połączeń i nazwa miasta.
+
+#include <iostream>
+using namespace std;
+
+struct pociag
+{
+	char miasto_docelowe[30];
+	unsigned int dlugosc_trasy;
+	double godzina_odjazdu;
+	char rodzaj;
+};
+double SredniaDlugoscTrasy(pociag baza[], int rozmiar, char miasto[])
+{
+	int licznik = 0;
+	double suma;
+	for(int i = 0; i < rozmiar; i++)
+	{
+		if(baza[i].miasto_docelowe == miasto) //tutaj jest chujnia eh
+		{
+			suma += baza[i].dlugosc_trasy;
+			licznik++;
+		}
+	}
+	return suma / licznik;
+}
+int main()
+{
+	pociag rozklad_jazdy[50];
+	return 0;
+}
